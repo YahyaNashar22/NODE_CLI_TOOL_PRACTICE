@@ -1,6 +1,6 @@
 # HOW TO START
 - cd tool
-  - npm install ( for external "arg" dependency)
+  - npm install ( for external dependencies )
   - npm link
 - cd ../testProject
   - npm link tool
