@@ -1,10 +1,13 @@
+import createLogger from "../logger.js";
 import fs from "fs";
 import path from "path";
-import chalk from "chalk";
 import { cosmiconfigSync } from "cosmiconfig";
 import betterAjvErrors from "better-ajv-errors";
 import Ajv from "ajv";
 import { fileURLToPath } from "url";
+
+
+const logger = createLogger("config:mgr");
 
 const ajv = new Ajv();
 
@@ -22,7 +25,7 @@ export function getConfig() {
     const result = explorer.search();
 
     if (result && result.config) {
-        console.log(chalk.green("Found configuration"));
+        logger.debug("Found configuration");
 
         const rawConfig = result.config;
         const config =
@@ -33,7 +36,7 @@ export function getConfig() {
         const isValid = ajv.validate(schema, config);
 
         if (!isValid) {
-            console.log(chalk.yellow('Invalid configuration was supplied'));
+            logger.warning('Invalid configuration was supplied');
             console.log(betterAjvErrors(schema, config, ajv.errors));
             process.exit(1);
         }
@@ -41,6 +44,6 @@ export function getConfig() {
         return config;
     }
 
-    console.log(chalk.yellow("Could not find configuration, using default"));
+    logger.warning("Could not find configuration, using default");
     return { port: 1234 };
 }

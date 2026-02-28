@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 import arg from "arg";
-import chalk from "chalk";
 import { getConfig } from "../src/commands/config-mgr.js";
 import { start } from "../src/commands/start.js";
+import createLogger from "../src/logger.js"
+
+const logger = createLogger("tool");
 
 try {
 
@@ -16,12 +18,12 @@ try {
         start(config);
     }
 } catch (error) {
-    console.log(chalk.yellow(error.message + "\n"));
+    logger.warning(error.message + "\n");
     usage();
 }
 
 function usage() {
-    console.log(chalk.whiteBright(`tool [CMD]
+    logger.debug(`tool [CMD]
         --start\tStarts the app
-        --build\tBuilds the app`));
+        --build\tBuilds the app`);
 }
